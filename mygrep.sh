@@ -7,15 +7,15 @@ reset=$'\033[0m'
 print_help () {
     cat << EOF
 
-Usage: ./$0 [OPTION]... PATTERNS [FILE]...
+Usage: $0 [OPTION]... PATTERNS [FILE]...
 --------------------------------------------------
 mini version of grep command
 Search for a string (case-insensitive) and print matching lines from a text file
 
 Example:
-  ./$0 "hello" file.txt
-  ./$0 -n "hello" file.txt
-  ./$0 -vn "hello" file.txt
+  $0 "hello" file.txt
+  $0 -n "hello" file.txt
+  $0 -vn "hello" file.txt
 
 options:
   -h, --help                        display this help and exit
@@ -33,13 +33,13 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-for arg in "$@"; do
-    case "$arg" in
-        --help) print_help ;;
-        --line-number) line_number=true ;;
-        --invert-match) invert_match=true ;;
-    esac
-done
+# for arg in "$@"; do
+#     case "$arg" in
+#         -h | --help) print_help ;;
+#         -n | --line-number) line_number=true ;;
+#         -v | --invert-match) invert_match=true ;;
+#     esac
+# done
 
 while getopts ":hnv" opt; do
     case $opt in
@@ -53,8 +53,9 @@ done
 # Remove options from the positional parameters
 shift $((OPTIND - 1))
 
-if [ $# -lt 1 ]; then
-    echo "No patterns provided. Use -h or --help for usage information."
+if [ $# -lt 2 ]; then
+    echo "Error: missing PATTERN or FILE" >&2
+    echo "Try '$0 --help' for more information." >&2
     exit 1
 fi
 
